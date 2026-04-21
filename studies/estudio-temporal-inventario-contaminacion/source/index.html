@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estudio temporal directo inventario-contaminación</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Open+Sans:wght@300;400;600;700&display=swap');
+    :root {
+      --panel: rgba(255,255,255,0.95);
+      --ink: #22303b;
+      --muted: #5d6b77;
+      --line: #d7e1e8;
+      --blue: #0b6c88;
+      --green: #17795b;
+      --orange: #c56024;
+      --pink: #b14678;
+      --shadow: 0 20px 44px rgba(15, 38, 56, 0.10);
+    }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Open Sans", "Segoe UI", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(11, 108, 136, 0.12), transparent 24%),
+        radial-gradient(circle at 88% 10%, rgba(197, 96, 36, 0.10), transparent 22%),
+        linear-gradient(180deg, #f7f9fb 0%, #eef3f6 100%);
+    }
+    main { max-width: 1360px; margin: 0 auto; padding: 24px 18px 36px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(20,53,74,.08);
+      border-radius: 26px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .eyebrow {
+      display:inline-flex; padding:8px 12px; border-radius:999px; background:rgba(11,108,136,.10);
+      color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; margin-bottom:12px;
+    }
+    h1,h2,h3{margin-top:0; font-family:"Lato", "Open Sans", "Segoe UI", "Helvetica Neue", sans-serif; color:#0c5f7b}
+    h1{font-size:42px; line-height:1.02; letter-spacing:-.04em; margin-bottom:10px; color:var(--blue); font-weight:400}
+    h2{font-size:24px; letter-spacing:-.02em; margin-bottom:12px; font-weight:400}
+    p, li{color:var(--muted); line-height:1.65}
+    .hero-grid{display:grid; grid-template-columns:minmax(0,1.45fr) minmax(340px,.95fr); gap:22px; align-items:start}
+    .kpi-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+    .kpi{border:1px solid rgba(20,53,74,.08); border-radius:18px; padding:16px; background:rgba(255,255,255,.84)}
+    .kpi span{display:block; font-size:11px; letter-spacing:.10em; text-transform:uppercase; color:var(--muted); font-weight:800; margin-bottom:10px}
+    .kpi strong{display:block; font-size:32px; line-height:1; color:var(--blue); margin-bottom:8px}
+    .pill-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+    .pill{display:inline-flex; align-items:center; padding:9px 12px; border-radius:999px; border:1px solid var(--line); background:#fff; font-size:13px; color:var(--muted); font-weight:700}
+    .pill strong{color:var(--ink); margin-left:6px}
+    .story-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+    .story{border-radius:18px; padding:18px; border:1px solid rgba(20,53,74,.08); background:linear-gradient(180deg,#fff 0%, #f5f8fb 100%)}
+    .story.co2{border-left:6px solid var(--green)}
+    .story.no2{border-left:6px solid var(--orange)}
+    .story.support{border-left:6px solid var(--pink)}
+    .tag{font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px}
+    .story strong{display:block; font-size:24px; margin-bottom:8px; font-family:"Lato", "Open Sans", "Segoe UI", "Helvetica Neue", sans-serif; font-weight:400; color:#123e56}
+    .formula{padding:16px; border-radius:16px; background:#f7fafc; border:1px solid var(--line); overflow-x:auto; font-family:"Cascadia Code","Consolas",monospace; font-size:13px; color:#33404a; line-height:1.6; white-space:pre-wrap}
+    .three-col{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px}
+    .chart-card{border:1px solid rgba(20,53,74,.08); border-radius:18px; padding:16px; background:#fff}
+    .chart-shell{position:relative; height:320px; min-height:320px}
+    .chart-shell.tall{height:340px; min-height:340px}
+    .chart-shell canvas{position:absolute; inset:0; width:100% !important; height:100% !important; display:block}
+    .stats-table{width:100%; border-collapse:collapse; font-size:14px}
+    .stats-table th,.stats-table td{padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top}
+    .stats-table th{font-size:11px; letter-spacing:.10em; text-transform:uppercase; color:var(--muted); background:rgba(247,250,252,.92)}
+    .callout{padding:16px 18px; border-radius:16px; background:#fff; border:1px dashed rgba(11,108,136,.28); color:var(--muted)}
+    ul.refs{margin:0; padding-left:20px} ul.refs li{margin-bottom:14px}
+    a{color:var(--blue); text-decoration:none} a:hover{text-decoration:underline}
+    @media (max-width:1180px){.three-col{grid-template-columns:1fr}}
+    @media (max-width:1040px){.hero-grid,.story-grid{grid-template-columns:1fr}}
+    @media (max-width:720px){main{padding:14px 10px 28px} .panel{padding:18px; border-radius:18px} h1{font-size:32px} .kpi-grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <span class="eyebrow">Estudio temporal directo</span>
+      <div class="hero-grid">
+        <div>
+          <h1>Relación diaria entre inventario y CO2/NO2</h1>
+          <p>Esta versión se ha rehecho para que la lectura sea directa. Solo se muestran relaciones del mismo día con sentido claro: <strong>CO2 inventario vs CO2 sensores</strong>, <strong>NOx inventario vs NO2 sensores</strong> y, como apoyo, <strong>actividad diaria del inventario vs NO2</strong>.</p>
+          <div class="pill-row">
+            <div class="pill">Periodo<strong>2025-09-19 a 2025-09-28</strong></div>
+            <div class="pill">Días solapados<strong>10</strong></div>
+            <div class="pill">Resolución inventario<strong>diaria</strong></div>
+            <div class="pill">O3<strong>excluido</strong></div>
+          </div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <span>CO2 directo</span>
+            <strong>0.0374</strong>
+            <p>Correlación del mismo día entre <code>emisiones_totales_co2_g</code> y CO2 observado.</p>
+          </div>
+          <div class="kpi">
+            <span>NO2 directo</span>
+            <strong>0.2591</strong>
+            <p>Correlación del mismo día entre <code>emisiones_totales_nox_g</code> y NO2 observado.</p>
+          </div>
+          <div class="kpi">
+            <span>NO2 actividad</span>
+            <strong>0.5999</strong>
+            <p>Correlación del mismo día entre <code>trips_total</code> y NO2 observado.</p>
+          </div>
+          <div class="kpi">
+            <span>Lectura</span>
+            <strong>señal visible</strong>
+            <p>Con 10 días, la señal más visible aparece en NO2 cuando el inventario se lee como actividad diaria.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Lectura principal</h2>
+      <div class="story-grid">
+        <div class="story co2">
+          <div class="tag">CO2</div>
+          <strong>La relación directa CO2-inventario no sale clara</strong>
+          <p>La correlación del mismo día es <strong>0.0374</strong>. En este corte tan corto, el CO2 ambiente no sigue de forma limpia la masa diaria total del inventario.</p>
+        </div>
+        <div class="story no2">
+          <div class="tag">NO2</div>
+          <strong>La relación directa NOx-NO2 es positiva, pero débil</strong>
+          <p>La correlación del mismo día entre NOx del inventario y NO2 observado es <strong>0.2591</strong>. Hay una señal compatible, pero todavía corta para una conclusión fuerte.</p>
+        </div>
+        <div class="story support">
+          <div class="tag">Apoyo</div>
+          <strong>NO2 sigue mejor la actividad diaria que la masa total</strong>
+          <p>La relación más visible del estudio es <strong>trayectos totales vs NO2</strong>, con correlación <strong>0.5999</strong>. Eso hace el relato más claro con lo que tienes hoy.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Cómo se ha hecho</h2>
+      <div class="formula">1. Inventario diario
+I_d = sum(emisiones_d, trayectos_d, kms_d)
+
+2. Sensores diarios ciudad
+C_d = media_estaciones(contaminante_d)
+M_d = media_estaciones(meteorología_d)
+
+3. Pares directos del mismo día
+CO2_d ~ emisiones_totales_co2_g_d
+NO2_d ~ emisiones_totales_nox_g_d
+
+4. Lectura auxiliar
+NO2_d ~ trips_total_d
+
+5. Comprobación ajustada
+contaminante_d = alpha + beta * inventario_d + gamma * meteorología_d + error_d
+
+El objetivo es una lectura temporal simple y defendible, no un modelo causal duro.</div>
+      <p class="callout">La metodología y las referencias están en <a href="references/procedure.html">procedure.html</a> y <a href="references/index.html">index.html</a>.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Series diarias normalizadas</h2>
+      <div class="three-col">
+        <div class="chart-card">
+          <h3>CO2 inventario vs CO2 sensores</h3>
+          <div class="chart-shell"><canvas id="co2LineChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>NOx inventario vs NO2 sensores</h3>
+          <div class="chart-shell"><canvas id="no2DirectLineChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Actividad del inventario vs NO2</h3>
+          <div class="chart-shell"><canvas id="no2ActivityLineChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Dispersión diaria</h2>
+      <div class="three-col">
+        <div class="chart-card">
+          <h3>CO2 observado vs CO2 inventario</h3>
+          <div class="chart-shell"><canvas id="co2ScatterChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>NO2 observado vs NOx inventario</h3>
+          <div class="chart-shell"><canvas id="no2DirectScatterChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>NO2 observado vs trayectos totales</h3>
+          <div class="chart-shell"><canvas id="no2ActivityScatterChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Composición diaria del inventario</h2>
+      <div class="chart-card">
+        <h3>Trayectos counted, interior y salidas</h3>
+        <div class="chart-shell tall"><canvas id="tripMixChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Resultados clave</h2>
+      <table class="dataframe stats-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Relación</th>
+      <th>Rol</th>
+      <th>Pearson día</th>
+      <th>Spearman día</th>
+      <th>Coef. base</th>
+      <th>p base</th>
+      <th>Coef. ajustado</th>
+      <th>p ajustado</th>
+      <th>Lectura</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CO2 inventario -&gt; CO2 sensores</td>
+      <td>principal</td>
+      <td>0.0374</td>
+      <td>-0.0061</td>
+      <td>0</td>
+      <td>0.9289</td>
+      <td>-0.0001</td>
+      <td>0.3987</td>
+      <td>sin señal clara</td>
+    </tr>
+    <tr>
+      <td>NOx inventario -&gt; NO2 sensores</td>
+      <td>principal</td>
+      <td>0.2591</td>
+      <td>0.5515</td>
+      <td>0.0085</td>
+      <td>0.2166</td>
+      <td>-0.0027</td>
+      <td>0.6822</td>
+      <td>señal débil o moderada</td>
+    </tr>
+    <tr>
+      <td>Actividad del inventario -&gt; NO2 sensores</td>
+      <td>apoyo</td>
+      <td>0.5999</td>
+      <td>0.697</td>
+      <td>0.009</td>
+      <td>0.0476</td>
+      <td>-0.0022</td>
+      <td>0.6258</td>
+      <td>señal visible</td>
+    </tr>
+  </tbody>
+</table>
+    </section>
+
+    <section class="panel">
+      <h2>Promedios por días bajos, medios y altos</h2>
+      <table class="dataframe stats-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Relación</th>
+      <th>Grupo</th>
+      <th>Contaminante</th>
+      <th>Media observada</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CO2 inventario -&gt; CO2 sensores</td>
+      <td>bajo</td>
+      <td>CO2 observado</td>
+      <td>536.7535</td>
+    </tr>
+    <tr>
+      <td>CO2 inventario -&gt; CO2 sensores</td>
+      <td>medio</td>
+      <td>CO2 observado</td>
+      <td>521.2307</td>
+    </tr>
+    <tr>
+      <td>CO2 inventario -&gt; CO2 sensores</td>
+      <td>alto</td>
+      <td>CO2 observado</td>
+      <td>535.1484</td>
+    </tr>
+    <tr>
+      <td>NOx inventario -&gt; NO2 sensores</td>
+      <td>bajo</td>
+      <td>NO2 observado</td>
+      <td>34.7374</td>
+    </tr>
+    <tr>
+      <td>NOx inventario -&gt; NO2 sensores</td>
+      <td>medio</td>
+      <td>NO2 observado</td>
+      <td>38.0661</td>
+    </tr>
+    <tr>
+      <td>NOx inventario -&gt; NO2 sensores</td>
+      <td>alto</td>
+      <td>NO2 observado</td>
+      <td>36.5211</td>
+    </tr>
+    <tr>
+      <td>Actividad del inventario -&gt; NO2 sensores</td>
+      <td>bajo</td>
+      <td>NO2 observado</td>
+      <td>34.4774</td>
+    </tr>
+    <tr>
+      <td>Actividad del inventario -&gt; NO2 sensores</td>
+      <td>medio</td>
+      <td>NO2 observado</td>
+      <td>38.3481</td>
+    </tr>
+    <tr>
+      <td>Actividad del inventario -&gt; NO2 sensores</td>
+      <td>alto</td>
+      <td>NO2 observado</td>
+      <td>36.5857</td>
+    </tr>
+  </tbody>
+</table>
+    </section>
+
+    <section class="panel">
+      <h2>Panel diario usado</h2>
+      <table class="dataframe stats-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Día</th>
+      <th>CO2 inventario</th>
+      <th>NOx inventario</th>
+      <th>Trayectos</th>
+      <th>CO2 observado</th>
+      <th>NO2 observado</th>
+      <th>Temperatura</th>
+      <th>Humedad</th>
+      <th>Presión</th>
+      <th>Precipitación</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2025-09-19</td>
+      <td>948347</td>
+      <td>529.0555</td>
+      <td>975</td>
+      <td>580.7665</td>
+      <td>35.3198</td>
+      <td>27.2703</td>
+      <td>46.1689</td>
+      <td>1022.6479</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-20</td>
+      <td>677567</td>
+      <td>321.8488</td>
+      <td>646</td>
+      <td>547.0519</td>
+      <td>34.6185</td>
+      <td>26.4707</td>
+      <td>45.0834</td>
+      <td>1019.6398</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-21</td>
+      <td>619685</td>
+      <td>386.513</td>
+      <td>503</td>
+      <td>475.3449</td>
+      <td>33.5785</td>
+      <td>25.5839</td>
+      <td>49.4537</td>
+      <td>1013.028</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-22</td>
+      <td>777824</td>
+      <td>388.3765</td>
+      <td>878</td>
+      <td>504.8368</td>
+      <td>43.1984</td>
+      <td>25.3659</td>
+      <td>34.3483</td>
+      <td>1013.5066</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>2025-09-23</td>
+      <td>829073</td>
+      <td>483.3988</td>
+      <td>910</td>
+      <td>511.8033</td>
+      <td>37.0159</td>
+      <td>24.2895</td>
+      <td>39.2558</td>
+      <td>1015.3356</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-24</td>
+      <td>877871</td>
+      <td>429.3055</td>
+      <td>950</td>
+      <td>500.7987</td>
+      <td>37.4214</td>
+      <td>23.2327</td>
+      <td>40.8457</td>
+      <td>1018.085</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-25</td>
+      <td>841649</td>
+      <td>474.2174</td>
+      <td>869</td>
+      <td>523.8799</td>
+      <td>37.2275</td>
+      <td>23.9855</td>
+      <td>40.471</td>
+      <td>1017.8926</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-26</td>
+      <td>641586</td>
+      <td>280.9529</td>
+      <td>602</td>
+      <td>521.5607</td>
+      <td>35.8795</td>
+      <td>23.2615</td>
+      <td>44.479</td>
+      <td>1018.3326</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-27</td>
+      <td>673796</td>
+      <td>362.1401</td>
+      <td>573</td>
+      <td>582.188</td>
+      <td>35.0298</td>
+      <td>23.9951</td>
+      <td>46.5038</td>
+      <td>1018.5551</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2025-09-28</td>
+      <td>618375</td>
+      <td>280.9047</td>
+      <td>539</td>
+      <td>567.9204</td>
+      <td>33.4219</td>
+      <td>24.7152</td>
+      <td>47.7858</td>
+      <td>1014.3799</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+    </section>
+
+    <section class="panel">
+      <h2>Referencias incluidas</h2>
+      <ul class="refs">
+        <li><strong>Liu, Z. et al. (2020). Carbon Monitor: a near-real-time daily dataset of global CO2 emission from fossil fuel and cement production. Scientific Data / arXiv preprint.</strong><br>Justifica trabajar con emisiones diarias y leer el inventario como una señal temporal de actividad emisora.<br><a href="https://arxiv.org/abs/2006.07690">Fuente web</a> | <a href="references/01_carbon_monitor_2020.pdf">PDF local</a></li><li><strong>Gurney, K.R. et al. (2022). Near-real-time estimates of daily CO2 emissions from 1500 cities worldwide. arXiv preprint.</strong><br>Refuerza la relevancia de una lectura diaria de emisiones urbanas y su uso para seguimiento casi en tiempo real.<br><a href="https://arxiv.org/abs/2204.07836">Fuente web</a> | <a href="references/02_daily_city_co2_2022.pdf">PDF local</a></li><li><strong>Kim, H.-C.; Kim, E.; Bae, C.; Cho, J.; Kim, B.-U.; Kim, S. (2018). Effects of meteorology and emissions on urban air quality: a quantitative statistical approach to long-term records (1999–2016) in Seoul, South Korea. Atmospheric Chemistry and Physics, 18, 16121-16137.</strong><br>Sustenta que en estudios temporales urbanos hay que interpretar contaminación y emisiones junto a la meteorología.<br><a href="https://acp.copernicus.org/articles/18/16121/2018/">Fuente web</a> | <a href="references/03_seoul_2018_meteorology_emissions.pdf">PDF local</a></li><li><strong>Viard, B.; Fu, S. (2015). The effect of Beijing&#x27;s driving restrictions on pollution and economic activity. Journal of Public Economics, 125, 98-115.</strong><br>Aporta una referencia clásica para leer cambios temporales de contaminación asociados a variaciones del tráfico y la actividad.<br><a href="https://mpra.ub.uni-muenchen.de/33009/">Fuente web</a> | <a href="references/04_viard_fu_2015_driving_restrictions.pdf">PDF local</a></li><li><strong>Gonzalez-Garcia, M. et al. (2025). Air Quality Assessment During the Initial Implementation Phase of a Traffic-Restricted Zone in an Urban Area: A Case Study Based on NO2 Levels in Seville, Spain. Processes, 13(3), 645.</strong><br>Contexto español reciente para interpretar patrones temporales de NO2 bajo cambios de movilidad y condiciones meteorológicas.<br><a href="https://www.mdpi.com/2227-9717/13/3/645">Fuente web</a> | <a href="references/05_seville_2025_lez_no2.pdf">PDF local</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    const charts = {"labels": ["2025-09-19", "2025-09-20", "2025-09-21", "2025-09-22", "2025-09-23", "2025-09-24", "2025-09-25", "2025-09-26", "2025-09-27", "2025-09-28"], "co2DirectLine": [{"label": "CO2 inventario", "data": [1.7464852355658225, -0.6447533024113059, -1.1558970605971168, 0.24061456713067397, 0.6931875688592832, 1.1241203481196178, 0.8042487347693515, -0.9624919033030118, -0.6780475181531848, -1.167466669980136]}, {"label": "CO2 sensores", "data": [1.4238504710490056, 0.4471839766864886, -1.6300737937418732, -0.7757305375478344, -0.5739228182886111, -0.8927100878755753, -0.2240794694848898, -0.2912618047566239, 1.4650285048032206, 1.051715559156693]}], "no2DirectLine": [{"label": "NOx inventario", "data": [1.6691079323045652, -0.8854768791041808, -0.08825289323433196, -0.06527865164178567, 1.1062214449235395, 0.4393224161049161, 0.993026382138493, -1.389668449869699, -0.38873780819327447, -1.390263493428237]}, {"label": "NO2 sensores", "data": [-0.3558172935829484, -0.6181223132985307, -1.0071463952404487, 2.5910382562197536, 0.27858321382445156, 0.43025818329077703, 0.35772104089171997, -0.1464824107167192, -0.46431345476871383, -1.0657188266193438]}], "no2ActivityLine": [{"label": "Trayectos", "data": [1.2965684130745079, -0.5540650268452886, -1.358443695260276, 0.7509409247090967, 0.9309417456131499, 1.1559427717432162, 0.7003156938298317, -0.8015661555883616, -0.9646918995326599, -1.1559427717432162]}, {"label": "NO2 sensores", "data": [-0.3558172935829484, -0.6181223132985307, -1.0071463952404487, 2.5910382562197536, 0.27858321382445156, 0.43025818329077703, 0.35772104089171997, -0.1464824107167192, -0.46431345476871383, -1.0657188266193438]}], "tripMix": {"labels": ["2025-09-19", "2025-09-20", "2025-09-21", "2025-09-22", "2025-09-23", "2025-09-24", "2025-09-25", "2025-09-26", "2025-09-27", "2025-09-28"], "datasets": [{"label": "Counted", "data": [94.0, 83.0, 74.0, 81.0, 82.0, 88.0, 85.0, 78.0, 70.0, 71.0]}, {"label": "Interior", "data": [792.0, 500.0, 371.0, 732.0, 767.0, 791.0, 710.0, 466.0, 452.0, 411.0]}, {"label": "Salidas", "data": [89.0, 63.0, 58.0, 65.0, 61.0, 71.0, 74.0, 58.0, 51.0, 57.0]}]}, "co2DirectScatter": [{"x": 948346.665, "y": 580.7664872814732, "label": "2025-09-19"}, {"x": 677566.547, "y": 547.0519117750185, "label": "2025-09-20"}, {"x": 619685.426, "y": 475.3448711918471, "label": "2025-09-21"}, {"x": 777824.222, "y": 504.83684248977204, "label": "2025-09-22"}, {"x": 829072.882, "y": 511.8032549018119, "label": "2025-09-23"}, {"x": 877871.037, "y": 500.79870264879185, "label": "2025-09-24"}, {"x": 841649.275, "y": 523.8798645395498, "label": "2025-09-25"}, {"x": 641586.324, "y": 521.5607270158475, "label": "2025-09-26"}, {"x": 673796.362, "y": 582.1879550355401, "label": "2025-09-27"}, {"x": 618375.3015000001, "y": 567.9203717875959, "label": "2025-09-28"}], "co2DirectTrend": [{"x": 618375.3015000001, "y": 530.1097519709831}, {"x": 626836.1056923077, "y": 530.2060926877422}, {"x": 635296.9098846155, "y": 530.3024334045014}, {"x": 643757.7140769231, "y": 530.3987741212605}, {"x": 652218.5182692308, "y": 530.4951148380197}, {"x": 660679.3224615385, "y": 530.5914555547788}, {"x": 669140.1266538462, "y": 530.687796271538}, {"x": 677600.9308461539, "y": 530.7841369882972}, {"x": 686061.7350384616, "y": 530.8804777050564}, {"x": 694522.5392307693, "y": 530.9768184218154}, {"x": 702983.343423077, "y": 531.0731591385746}, {"x": 711444.1476153847, "y": 531.1694998553338}, {"x": 719904.9518076924, "y": 531.265840572093}, {"x": 728365.756, "y": 531.3621812888522}, {"x": 736826.5601923077, "y": 531.4585220056113}, {"x": 745287.3643846154, "y": 531.5548627223704}, {"x": 753748.1685769232, "y": 531.6512034391296}, {"x": 762208.9727692308, "y": 531.7475441558888}, {"x": 770669.7769615385, "y": 531.8438848726479}, {"x": 779130.5811538462, "y": 531.9402255894071}, {"x": 787591.385346154, "y": 532.0365663061663}, {"x": 796052.1895384616, "y": 532.1329070229255}, {"x": 804512.9937307693, "y": 532.2292477396845}, {"x": 812973.797923077, "y": 532.3255884564437}, {"x": 821434.6021153847, "y": 532.4219291732029}, {"x": 829895.4063076924, "y": 532.5182698899621}, {"x": 838356.2105, "y": 532.6146106067212}, {"x": 846817.0146923078, "y": 532.7109513234803}, {"x": 855277.8188846154, "y": 532.8072920402395}, {"x": 863738.6230769232, "y": 532.9036327569987}, {"x": 872199.4272692308, "y": 532.9999734737578}, {"x": 880660.2314615385, "y": 533.096314190517}, {"x": 889121.0356538462, "y": 533.1926549072762}, {"x": 897581.839846154, "y": 533.2889956240354}, {"x": 906042.6440384616, "y": 533.3853363407944}, {"x": 914503.4482307693, "y": 533.4816770575536}, {"x": 922964.252423077, "y": 533.5780177743128}, {"x": 931425.0566153848, "y": 533.674358491072}, {"x": 939885.8608076924, "y": 533.7706992078312}, {"x": 948346.665, "y": 533.8670399245902}], "no2DirectScatter": [{"x": 529.05553, "y": 35.31982613460712, "label": "2025-09-19"}, {"x": 321.84879, "y": 34.61854114479576, "label": "2025-09-20"}, {"x": 386.51299, "y": 33.57846669392622, "label": "2025-09-21"}, {"x": 388.37647, "y": 43.1983850979839, "label": "2025-09-22"}, {"x": 483.398845, "y": 37.01592617057257, "label": "2025-09-23"}, {"x": 429.305525, "y": 37.421436440761696, "label": "2025-09-24"}, {"x": 474.2174, "y": 37.227504928419975, "label": "2025-09-25"}, {"x": 280.95295, "y": 35.87949293533089, "label": "2025-09-26"}, {"x": 362.14014499999996, "y": 35.029756469244894, "label": "2025-09-27"}, {"x": 280.904685, "y": 33.42187050302101, "label": "2025-09-28"}], "no2DirectTrend": [{"x": 280.904685, "y": 35.3079544111336}, {"x": 287.26752717948716, "y": 35.362300930171685}, {"x": 293.63036935897435, "y": 35.41664744920977}, {"x": 299.99321153846154, "y": 35.47099396824785}, {"x": 306.35605371794867, "y": 35.52534048728593}, {"x": 312.71889589743586, "y": 35.579687006324015}, {"x": 319.08173807692305, "y": 35.6340335253621}, {"x": 325.44458025641023, "y": 35.68838004440018}, {"x": 331.8074224358974, "y": 35.74272656343826}, {"x": 338.1702646153846, "y": 35.797073082476345}, {"x": 344.53310679487174, "y": 35.85141960151443}, {"x": 350.89594897435893, "y": 35.905766120552514}, {"x": 357.2587911538461, "y": 35.96011263959059}, {"x": 363.6216333333333, "y": 36.014459158628675}, {"x": 369.9844755128205, "y": 36.06880567766676}, {"x": 376.3473176923077, "y": 36.123152196704844}, {"x": 382.7101598717949, "y": 36.17749871574293}, {"x": 389.073002051282, "y": 36.231845234781005}, {"x": 395.4358442307692, "y": 36.28619175381909}, {"x": 401.7986864102564, "y": 36.340538272857174}, {"x": 408.16152858974357, "y": 36.39488479189526}, {"x": 414.5243707692307, "y": 36.449231310933335}, {"x": 420.8872129487179, "y": 36.50357782997142}, {"x": 427.2500551282051, "y": 36.557924349009504}, {"x": 433.61289730769226, "y": 36.61227086804759}, {"x": 439.97573948717945, "y": 36.666617387085665}, {"x": 446.33858166666664, "y": 36.72096390612375}, {"x": 452.70142384615383, "y": 36.775310425161834}, {"x": 459.064266025641, "y": 36.82965694419992}, {"x": 465.4271082051282, "y": 36.884003463237995}, {"x": 471.7899503846154, "y": 36.93834998227608}, {"x": 478.1527925641025, "y": 36.992696501314164}, {"x": 484.5156347435897, "y": 37.04704302035225}, {"x": 490.8784769230769, "y": 37.101389539390325}, {"x": 497.24131910256403, "y": 37.15573605842841}, {"x": 503.6041612820512, "y": 37.210082577466494}, {"x": 509.9670034615384, "y": 37.26442909650458}, {"x": 516.3298456410256, "y": 37.31877561554266}, {"x": 522.6926878205128, "y": 37.37312213458074}, {"x": 529.05553, "y": 37.427468653618824}], "no2ActivityScatter": [{"x": 975.0, "y": 35.31982613460712, "label": "2025-09-19"}, {"x": 646.0, "y": 34.61854114479576, "label": "2025-09-20"}, {"x": 503.0, "y": 33.57846669392622, "label": "2025-09-21"}, {"x": 878.0, "y": 43.1983850979839, "label": "2025-09-22"}, {"x": 910.0, "y": 37.01592617057257, "label": "2025-09-23"}, {"x": 950.0, "y": 37.421436440761696, "label": "2025-09-24"}, {"x": 869.0, "y": 37.227504928419975, "label": "2025-09-25"}, {"x": 602.0, "y": 35.87949293533089, "label": "2025-09-26"}, {"x": 573.0, "y": 35.029756469244894, "label": "2025-09-27"}, {"x": 539.0, "y": 33.42187050302101, "label": "2025-09-28"}], "no2ActivityTrend": [{"x": 503.0, "y": 34.092195501152844}, {"x": 515.1025641025641, "y": 34.20139045482241}, {"x": 527.2051282051282, "y": 34.310585408491974}, {"x": 539.3076923076923, "y": 34.41978036216154}, {"x": 551.4102564102564, "y": 34.528975315831104}, {"x": 563.5128205128206, "y": 34.63817026950067}, {"x": 575.6153846153846, "y": 34.747365223170235}, {"x": 587.7179487179487, "y": 34.8565601768398}, {"x": 599.8205128205128, "y": 34.965755130509365}, {"x": 611.9230769230769, "y": 35.07495008417893}, {"x": 624.025641025641, "y": 35.184145037848495}, {"x": 636.1282051282051, "y": 35.29333999151806}, {"x": 648.2307692307693, "y": 35.402534945187625}, {"x": 660.3333333333333, "y": 35.51172989885718}, {"x": 672.4358974358975, "y": 35.620924852526755}, {"x": 684.5384615384615, "y": 35.73011980619631}, {"x": 696.6410256410256, "y": 35.83931475986588}, {"x": 708.7435897435897, "y": 35.948509713535444}, {"x": 720.8461538461538, "y": 36.05770466720501}, {"x": 732.948717948718, "y": 36.166899620874574}, {"x": 745.051282051282, "y": 36.27609457454414}, {"x": 757.1538461538462, "y": 36.385289528213704}, {"x": 769.2564102564103, "y": 36.49448448188327}, {"x": 781.3589743589744, "y": 36.603679435552834}, {"x": 793.4615384615385, "y": 36.7128743892224}, {"x": 805.5641025641025, "y": 36.822069342891965}, {"x": 817.6666666666666, "y": 36.93126429656153}, {"x": 829.7692307692307, "y": 37.040459250231095}, {"x": 841.8717948717949, "y": 37.14965420390066}, {"x": 853.9743589743589, "y": 37.258849157570225}, {"x": 866.0769230769231, "y": 37.36804411123978}, {"x": 878.1794871794872, "y": 37.477239064909355}, {"x": 890.2820512820513, "y": 37.58643401857891}, {"x": 902.3846153846154, "y": 37.69562897224848}, {"x": 914.4871794871794, "y": 37.80482392591804}, {"x": 926.5897435897436, "y": 37.91401887958761}, {"x": 938.6923076923076, "y": 38.023213833257174}, {"x": 950.7948717948718, "y": 38.13240878692674}, {"x": 962.8974358974359, "y": 38.241603740596304}, {"x": 975.0, "y": 38.35079869426587}], "profiles": [{"relation_id": "co2_direct", "relation_label": "CO2 inventario -> CO2 sensores", "metric": "emisiones_totales_co2_g", "metric_label": "Emisiones CO2 inventario", "target": "CO2", "target_label": "CO2 observado", "group": "bajo", "target_mean": 536.7534812577077}, {"relation_id": "co2_direct", "relation_label": "CO2 inventario -> CO2 sensores", "metric": "emisiones_totales_co2_g", "metric_label": "Emisiones CO2 inventario", "target": "CO2", "target_label": "CO2 observado", "group": "medio", "target_mean": 521.2306697222008}, {"relation_id": "co2_direct", "relation_label": "CO2 inventario -> CO2 sensores", "metric": "emisiones_totales_co2_g", "metric_label": "Emisiones CO2 inventario", "target": "CO2", "target_label": "CO2 observado", "group": "alto", "target_mean": 535.1483514899382}, {"relation_id": "no2_direct", "relation_label": "NOx inventario -> NO2 sensores", "metric": "emisiones_totales_nox_g", "metric_label": "Emisiones NOx inventario", "target": "NO2", "target_label": "NO2 observado", "group": "bajo", "target_mean": 34.73741526309814}, {"relation_id": "no2_direct", "relation_label": "NOx inventario -> NO2 sensores", "metric": "emisiones_totales_nox_g", "metric_label": "Emisiones NOx inventario", "target": "NO2", "target_label": "NO2 observado", "group": "medio", "target_mean": 38.06609607755727}, {"relation_id": "no2_direct", "relation_label": "NOx inventario -> NO2 sensores", "metric": "emisiones_totales_nox_g", "metric_label": "Emisiones NOx inventario", "target": "NO2", "target_label": "NO2 observado", "group": "alto", "target_mean": 36.521085744533224}, {"relation_id": "no2_activity", "relation_label": "Actividad del inventario -> NO2 sensores", "metric": "trips_total", "metric_label": "Trayectos totales", "target": "NO2", "target_label": "NO2 observado", "group": "bajo", "target_mean": 34.477396650380754}, {"relation_id": "no2_activity", "relation_label": "Actividad del inventario -> NO2 sensores", "metric": "trips_total", "metric_label": "Trayectos totales", "target": "NO2", "target_label": "NO2 observado", "group": "medio", "target_mean": 38.348143723733216}, {"relation_id": "no2_activity", "relation_label": "Actividad del inventario -> NO2 sensores", "metric": "trips_total", "metric_label": "Trayectos totales", "target": "NO2", "target_label": "NO2 observado", "group": "alto", "target_mean": 36.585729581980466}]};
+
+    function lineDatasets(series, palette) {
+      return series.map((item, idx) => ({
+        label: item.label,
+        data: item.data,
+        borderColor: palette[idx % palette.length],
+        backgroundColor: palette[idx % palette.length],
+        pointRadius: 4,
+        borderWidth: 2.5,
+        tension: 0.25,
+        fill: false
+      }));
+    }
+
+    function buildLineChart(id, labels, series, palette) {
+      new Chart(document.getElementById(id), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: lineDatasets(series, palette)
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' }
+          },
+          scales: {
+            y: { title: { display: true, text: 'z-score diario' } }
+          }
+        }
+      });
+    }
+
+    function buildScatterChart(id, points, trend, palette, xLabel, yLabel) {
+      new Chart(document.getElementById(id), {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Dias',
+              data: points,
+              backgroundColor: palette[0],
+              borderColor: palette[0],
+              pointRadius: 5
+            },
+            {
+              label: 'Ajuste lineal',
+              data: trend,
+              type: 'line',
+              borderColor: palette[1],
+              backgroundColor: palette[1],
+              pointRadius: 0,
+              borderWidth: 2,
+              tension: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          parsing: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const raw = ctx.raw || {};
+                  if (raw.label) {
+                    return `${raw.label}: x=${raw.x.toFixed(2)}, y=${raw.y.toFixed(2)}`;
+                  }
+                  return `${ctx.dataset.label}: x=${raw.x.toFixed(2)}, y=${raw.y.toFixed(2)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { title: { display: true, text: xLabel } },
+            y: { title: { display: true, text: yLabel } }
+          }
+        }
+      });
+    }
+
+    function buildTripMixChart() {
+      new Chart(document.getElementById('tripMixChart'), {
+        type: 'bar',
+        data: {
+          labels: charts.tripMix.labels,
+          datasets: [
+            { ...charts.tripMix.datasets[0], backgroundColor: '#0b6c88' },
+            { ...charts.tripMix.datasets[1], backgroundColor: '#17795b' },
+            { ...charts.tripMix.datasets[2], backgroundColor: '#c56024' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: {
+            x: { stacked: true },
+            y: { stacked: true, title: { display: true, text: 'Trayectos diarios' } }
+          }
+        }
+      });
+    }
+
+    buildLineChart('co2LineChart', charts.labels, charts.co2DirectLine, ['#17795b', '#0b6c88']);
+    buildLineChart('no2DirectLineChart', charts.labels, charts.no2DirectLine, ['#c56024', '#0b6c88']);
+    buildLineChart('no2ActivityLineChart', charts.labels, charts.no2ActivityLine, ['#b14678', '#0b6c88']);
+    buildScatterChart('co2ScatterChart', charts.co2DirectScatter, charts.co2DirectTrend, ['#17795b', '#0b6c88'], 'Emisiones CO2 inventario', 'CO2 observado');
+    buildScatterChart('no2DirectScatterChart', charts.no2DirectScatter, charts.no2DirectTrend, ['#c56024', '#0b6c88'], 'Emisiones NOx inventario', 'NO2 observado');
+    buildScatterChart('no2ActivityScatterChart', charts.no2ActivityScatter, charts.no2ActivityTrend, ['#b14678', '#0b6c88'], 'Trayectos totales', 'NO2 observado');
+    buildTripMixChart();
+  </script>
+</body>
+</html>

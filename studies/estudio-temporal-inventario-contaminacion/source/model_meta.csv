@@ -1,0 +1,7 @@
+model_id,title,outcome,n_obs,r2,intercept
+co2_direct_raw,CO2 ~ emisiones_totales_co2_g,CO2,10,0.0013952158051235841,523.0684922492622
+co2_direct_meteo,CO2 ~ emisiones_totales_co2_g + meteo,CO2,10,0.46726848601921955,-7860.006196173082
+no2_direct_raw,NO2 ~ emisiones_totales_nox_g,NO2,10,0.0671478919470283,32.90868198214663
+no2_direct_meteo,NO2 ~ emisiones_totales_nox_g + meteo,NO2,10,0.9036318268256065,99.74689848389316
+no2_activity_raw,NO2 ~ trips_total,NO2,10,0.35993614032399746,29.55389591188202
+no2_activity_meteo,NO2 ~ trips_total + meteo,NO2,10,0.9051538387887592,64.24355846325311
