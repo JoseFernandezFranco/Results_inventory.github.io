@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LISA con proxies de tráfico observado | Portal EYSA</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-link" href="../../index.html">
+        <img src="../../assets/eysa-logo.png" alt="EYSA">
+        <div class="brand-copy">
+          <span>Portal de resultados</span>
+          <strong>Grupo EYSA</strong>
+        </div>
+      </a>
+      <a class="button button-outline" href="../../index.html">Volver al portal</a>
+    </div>
+  </header>
+
+  <section class="hero-wrap">
+    <div class="hero-card" style="--study-accent:#84C987">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow eyebrow-on-dark">Inventario + tráfico</span>
+          <h1>LISA con proxies de tráfico observado</h1>
+          <p class="hero-copy">Agrupa el estudio que combina factores diarios del inventario con tráfico observado para construir capas proxy de NOx y CO2 y contrastarlas con sensores.</p>
+          <div class="metric-row">
+            <div class="metric-pill"><span>Periodo</span><strong>2025-09-19 a 2025-09-28</strong></div><div class="metric-pill"><span>Sectores</span><strong>124</strong></div><div class="metric-pill"><span>Sectores válidos</span><strong>57</strong></div><div class="metric-pill"><span>Mapas</span><strong>3</strong></div>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="callout callout-dark">
+            <span class="callout-tag">Lectura rápida</span>
+            <p>Relación espacial destacada: Proxy CO2 tráfico frente a CO2, con Moran bivariante -0.534 y p 0.010.</p>
+          </div>
+          <div class="callout callout-soft">
+            <span class="callout-tag">Qué incluye</span>
+            <p>Incluye mapas integrados, lectura guiada del análisis espacial y referencias para contextualizar los hallazgos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="page-shell">
+    <section class="panel"><div class="section-head"><span class="eyebrow">Método</span><h2>Cómo se ha construido este bloque</h2><p>Pasos principales aplicados para llegar a los resultados mostrados.</p></div><ol class="method-list"><li>Factores diarios calculados a partir del inventario de vehículo conectado</li><li>Factores de NOx y CO2 definidos como emisiones diarias totales divididas por trayectos diarios totales</li><li>Multiplicación de los conteos horarios de tráfico por los factores diarios del inventario para construir las capas proxy</li><li>Media diaria por estación y variable</li><li>Interpolación por distancia inversa hasta los centroides de sector</li><li>Valor medio por sector a lo largo de todo el periodo común del estudio</li><li>Pesos de contigüidad Queen entre sectores</li><li>Moran global</li><li>Getis-Ord Gi*</li><li>Moran local</li><li>Moran global bivariante</li><li>Moran local bivariante</li></ol></section>
+    
+    
+    <section class="panel"><div class="section-head"><span class="eyebrow">Mapas integrados</span><h2>Mapas visibles en la propia página</h2><p>Cada mapa queda integrado directamente en este índice para facilitar la lectura. Si necesitas más detalle, puedes abrirlo en una vista completa.</p></div><div class="map-embed-grid"><article class="map-embed-card"><div class="map-embed-head"><div><span class="artifact-kind">Mapa HTML</span><h3>Mapa 01 - Valor medio</h3><p>Mapa interactivo listo para abrir en navegador.</p></div><a class="button button-outline" href="source/maps/01_valor_medio.html">Abrir más grande</a></div><div class="map-embed-frame"><iframe src="source/maps/01_valor_medio.html" title="Mapa 01 - Valor medio" loading="lazy"></iframe></div></article><article class="map-embed-card"><div class="map-embed-head"><div><span class="artifact-kind">Mapa HTML</span><h3>Mapa 02 - Resultado univariante</h3><p>Mapa interactivo listo para abrir en navegador.</p></div><a class="button button-outline" href="source/maps/02_resultado_univariante.html">Abrir más grande</a></div><div class="map-embed-frame"><iframe src="source/maps/02_resultado_univariante.html" title="Mapa 02 - Resultado univariante" loading="lazy"></iframe></div></article><article class="map-embed-card"><div class="map-embed-head"><div><span class="artifact-kind">Mapa HTML</span><h3>Mapa 03 - Resultado bivariante</h3><p>Mapa interactivo listo para abrir en navegador.</p></div><a class="button button-outline" href="source/maps/03_resultado_bivariante.html">Abrir más grande</a></div><div class="map-embed-frame"><iframe src="source/maps/03_resultado_bivariante.html" title="Mapa 03 - Resultado bivariante" loading="lazy"></iframe></div></article></div></section>
+    
+    
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Grupo EYSA | Resultados integrados de movilidad, emisiones y calidad del aire.</p>
+    </div>
+  </footer>
+</body>
+</html>

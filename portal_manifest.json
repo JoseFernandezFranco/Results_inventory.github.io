@@ -1,0 +1,769 @@
+{
+  "generated_on": "2026-04-21",
+  "totals": {
+    "studies": 3,
+    "maps": 6,
+    "files": 24
+  },
+  "studies": [
+    {
+      "slug": "inventario-trip-proxy-lisa",
+      "title": "LISA con proxies sectoriales de trayectos",
+      "short_title": "Proxy por trayectos",
+      "category": "Análisis espacial",
+      "badge": "Inventario espacial",
+      "description": "Centraliza los resultados del estudio que reparte emisiones diarias entre trayectos counted, interiores y salidas para comparar su patrón espacial con contaminación observada.",
+      "accent": "#3EA0AE",
+      "period_label": "2025-09-19 a 2025-09-28",
+      "summary_kind": "trip",
+      "metrics": [
+        {
+          "label": "Periodo",
+          "value": "2025-09-19 a 2025-09-28"
+        },
+        {
+          "label": "Sectores",
+          "value": "124"
+        },
+        {
+          "label": "ZBE funcional",
+          "value": "22"
+        },
+        {
+          "label": "Mapas",
+          "value": "3"
+        }
+      ],
+      "highlight": "Relación espacial más visible: Proxy NOx counted frente a NO2, con Moran bivariante -0.377 y p 0.001.",
+      "links": {
+        "overview": [],
+        "maps": [
+          {
+            "href": "source/maps/00_resumen_global.html",
+            "path": "maps/00_resumen_global.html",
+            "title": "Mapa 00 - Resumen global",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "16.3 KB"
+          },
+          {
+            "href": "source/maps/01_valor_medio.html",
+            "path": "maps/01_valor_medio.html",
+            "title": "Mapa 01 - Valor medio",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "3.4 MB"
+          },
+          {
+            "href": "source/maps/02_resultado_univariante.html",
+            "path": "maps/02_resultado_univariante.html",
+            "title": "Mapa 02 - Resultado univariante",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "3.6 MB"
+          },
+          {
+            "href": "source/maps/03_resultado_bivariante.html",
+            "path": "maps/03_resultado_bivariante.html",
+            "title": "Mapa 03 - Resultado bivariante",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "4.5 MB"
+          }
+        ],
+        "data": [],
+        "docs": []
+      },
+      "quick_actions": [
+        {
+          "label": "Mapa principal",
+          "href": "source/maps/00_resumen_global.html"
+        }
+      ],
+      "counts": {
+        "overview": 0,
+        "maps": 3,
+        "data": 0,
+        "docs": 0,
+        "files": 4
+      },
+      "methodology": [
+        "Daily split of inventory trips into counted, interior-only and exits",
+        "Daily inventory emissions allocated to those three trip groups using trip counts",
+        "Daily traffic support interpolated to census-sector centroids from entry traffic sensors",
+        "Daily g/trip factors estimated from the connected-vehicle inventory for counted, interior and exit groups",
+        "Counted emissions estimated as g/trip times raw traffic support across all study sectors",
+        "Interior-only emissions estimated as g/trip times raw traffic support inside interior ZBE sectors",
+        "Exit emissions estimated as g/trip times raw traffic support across inner-border, border and exterior sectors using configurable shares",
+        "Daily pollutant means by air-quality station",
+        "Inverse-distance interpolation to sector centroids",
+        "Mean value by sector across the overlapping study period",
+        "Queen contiguity weights between sectors",
+        "Global Moran's I, Local Moran's I, Getis-Ord Gi* and bivariate Moran/LISA"
+      ],
+      "summary_payload": {
+        "article": {
+          "journal": "Experimental",
+          "year": 2026,
+          "volume": null,
+          "article_number": null,
+          "title": "LISA bivariante con proxies sectoriales de trayectos counted, interiores y salidas"
+        },
+        "methodology": [
+          "Daily split of inventory trips into counted, interior-only and exits",
+          "Daily inventory emissions allocated to those three trip groups using trip counts",
+          "Daily traffic support interpolated to census-sector centroids from entry traffic sensors",
+          "Daily g/trip factors estimated from the connected-vehicle inventory for counted, interior and exit groups",
+          "Counted emissions estimated as g/trip times raw traffic support across all study sectors",
+          "Interior-only emissions estimated as g/trip times raw traffic support inside interior ZBE sectors",
+          "Exit emissions estimated as g/trip times raw traffic support across inner-border, border and exterior sectors using configurable shares",
+          "Daily pollutant means by air-quality station",
+          "Inverse-distance interpolation to sector centroids",
+          "Mean value by sector across the overlapping study period",
+          "Queen contiguity weights between sectors",
+          "Global Moran's I, Local Moran's I, Getis-Ord Gi* and bivariate Moran/LISA"
+        ],
+        "weight_note": "The trip-weighted proxy no longer conserves the daily inventory mass by normalization. Instead, each component applies its daily g/trip factor to the raw sector traffic support, masking interior and exit components to the sectors where each trip type is assumed to occur.",
+        "inputs": {
+          "sensor_csv": "C:\\Users\\Jose\\Desktop\\Jose\\EYSA\\Automatizacion\\Coche-Conectado-Estudio\\inputs\\combined_flags.csv",
+          "inventory_csv": "C:\\Users\\Jose\\Desktop\\Jose\\EYSA\\Automatizacion\\Coche-Conectado-Estudio\\inputs\\inventario_cartagena_maestro.csv",
+          "sectors": "C:\\Users\\Jose\\Desktop\\Jose\\EYSA\\Automatizacion\\Definitivo_Limpio\\data_static\\cartagena_census_sections.geojson",
+          "value_column": "analysis_value_default",
+          "sector_id": "cusec",
+          "traffic_param": "coches_total",
+          "zbe_source": "official_sector_ids",
+          "sensor_variables": [
+            "CO",
+            "NO2",
+            "O3",
+            "SO2",
+            "PM10",
+            "PM25",
+            "PM1",
+            "VOC",
+            "CO2"
+          ],
+          "proxy_variables": [
+            "nox_proxy_counted",
+            "nox_proxy_interior",
+            "nox_proxy_salidas",
+            "nox_proxy_total",
+            "co2_proxy_counted",
+            "co2_proxy_interior",
+            "co2_proxy_salidas",
+            "co2_proxy_total"
+          ],
+          "univariate_variables": [
+            "nox_proxy_counted",
+            "nox_proxy_interior",
+            "nox_proxy_salidas",
+            "nox_proxy_total",
+            "co2_proxy_counted",
+            "co2_proxy_interior",
+            "co2_proxy_salidas",
+            "co2_proxy_total"
+          ],
+          "nox_targets": [
+            "NO2",
+            "PM10",
+            "PM25",
+            "VOC"
+          ],
+          "co2_targets": [
+            "CO2"
+          ],
+          "bivariate_pairs": [
+            {
+              "variable_x": "nox_proxy_counted",
+              "variable_y": "NO2"
+            },
+            {
+              "variable_x": "nox_proxy_counted",
+              "variable_y": "PM10"
+            },
+            {
+              "variable_x": "nox_proxy_counted",
+              "variable_y": "PM25"
+            },
+            {
+              "variable_x": "nox_proxy_counted",
+              "variable_y": "VOC"
+            },
+            {
+              "variable_x": "nox_proxy_total",
+              "variable_y": "NO2"
+            },
+            {
+              "variable_x": "nox_proxy_total",
+              "variable_y": "PM10"
+            },
+            {
+              "variable_x": "nox_proxy_total",
+              "variable_y": "PM25"
+            },
+            {
+              "variable_x": "nox_proxy_total",
+              "variable_y": "VOC"
+            },
+            {
+              "variable_x": "co2_proxy_counted",
+              "variable_y": "CO2"
+            },
+            {
+              "variable_x": "co2_proxy_total",
+              "variable_y": "CO2"
+            }
+          ]
+        },
+        "study_period_local": {
+          "start_day": "2025-09-19",
+          "end_day": "2025-09-28"
+        },
+        "inventory_daily_group_summary": {
+          "days": 10,
+          "mean_trips_counted": 80.6,
+          "mean_trips_interior": 599.2,
+          "mean_trips_salidas": 64.7,
+          "mean_share_counted": 0.11282782705549921,
+          "mean_share_interior": 0.7975549114460381,
+          "mean_share_salidas": 0.08961726149846279,
+          "mean_nox_counted_g": 43.24074357876209,
+          "mean_nox_interior_g": 315.74268131914266,
+          "mean_nox_salidas_g": 34.68790810209523,
+          "mean_co2_counted_g": 82666.03600666436,
+          "mean_co2_interior_g": 601739.4721774687,
+          "mean_co2_salidas_g": 66171.89596586693
+        },
+        "functional_zbe": {
+          "selection_mode": "official_sector_ids",
+          "requested_sector_count": 22,
+          "selected_sector_count": 22,
+          "selected_sector_ids": [
+            "3001601002",
+            "3001601004",
+            "3001602002",
+            "3001602005",
+            "3001602006",
+            "3001602011",
+            "3001603001",
+            "3001603002",
+            "3001603003",
+            "3001603006",
+            "3001603010",
+            "3001603013",
+            "3001603014",
+            "3001603019",
+            "3001603020",
+            "3001603022",
+            "3001603023",
+            "3001603028",
+            "3001603029",
+            "3001603032",
+            "3001603035",
+            "3001603036"
+          ],
+          "missing_sector_ids": [],
+          "zbe_polygon_buffer_m": 0.0
+        },
+        "sector_zones": {
+          "interior_sector_count": 22,
+          "inner_border_sector_count": 14,
+          "border_sector_count": 18,
+          "exterior_sector_count": 28,
+          "outside_model_sector_count": 56,
+          "exit_border_buffer_m": 250.0,
+          "exit_outer_buffer_m": 900.0
+        },
+        "sector_selection": {
+          "candidate_sector_count": 134,
+          "sector_count": 124,
+          "excluded_sector_count": 10,
+          "core_sensor_count": 38,
+          "core_radius_km": 5.0,
+          "study_buffer_m": 1250.0,
+          "max_nearest_sensor_km": 2.0
+        },
+        "sector_value_filter": {
+          "influence_radius_km": 1.0,
+          "min_local_stations": 2,
+          "valid_sector_count_by_variable": {
+            "CO": 68,
+            "NO2": 71,
+            "O3": 71,
+            "SO2": 68,
+            "PM10": 71,
+            "PM25": 71,
+            "PM1": 71,
+            "VOC": 63,
+            "CO2": 58,
+            "nox_proxy_counted": 124,
+            "nox_proxy_interior": 22,
+            "nox_proxy_salidas": 60,
+            "nox_proxy_total": 124,
+            "co2_proxy_counted": 124,
+            "co2_proxy_interior": 22,
+            "co2_proxy_salidas": 60,
+            "co2_proxy_total": 124
+          }
+        },
+        "traffic_selection": {
+          "traffic_sensor_count_before": 11,
+          "traffic_sensor_count_after": 11,
+          "traffic_rows_before": 2403,
+          "traffic_rows_after": 2403
+        },
+        "sector_count": 124,
+        "outputs": {
+          "inventory_daily_split_csv": "inventory_daily_split.csv",
+          "daily_sector_support_csv": "daily_sector_support.csv",
+          "daily_sector_proxy_components_csv": "daily_sector_proxy_components.csv",
+          "zbe_geometry_geojson": "zbe_functional_geometry.geojson",
+          "sector_results_geojson": "sector_results.geojson",
+          "univariate_global_csv": "univariate_global_results.csv",
+          "bivariate_global_csv": "bivariate_global_results.csv",
+          "summary_json": "run_summary.json"
+        }
+      },
+      "folder_name": "inventario_trip_proxy_lisa"
+    },
+    {
+      "slug": "inventario-traffic-proxy-lisa",
+      "title": "LISA con proxies de tráfico observado",
+      "short_title": "Proxy por tráfico",
+      "category": "Análisis espacial",
+      "badge": "Inventario + tráfico",
+      "description": "Agrupa el estudio que combina factores diarios del inventario con tráfico observado para construir capas proxy de NOx y CO2 y contrastarlas con sensores.",
+      "accent": "#84C987",
+      "period_label": "2025-09-19 a 2025-09-28",
+      "summary_kind": "traffic",
+      "metrics": [
+        {
+          "label": "Periodo",
+          "value": "2025-09-19 a 2025-09-28"
+        },
+        {
+          "label": "Sectores",
+          "value": "124"
+        },
+        {
+          "label": "Sectores válidos",
+          "value": "57"
+        },
+        {
+          "label": "Mapas",
+          "value": "3"
+        }
+      ],
+      "highlight": "Relación espacial destacada: Proxy CO2 tráfico frente a CO2, con Moran bivariante -0.534 y p 0.010.",
+      "links": {
+        "overview": [],
+        "maps": [
+          {
+            "href": "source/maps/00_resumen_global.html",
+            "path": "maps/00_resumen_global.html",
+            "title": "Mapa 00 - Resumen global",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "14.3 KB"
+          },
+          {
+            "href": "source/maps/01_valor_medio.html",
+            "path": "maps/01_valor_medio.html",
+            "title": "Mapa 01 - Valor medio",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "881.5 KB"
+          },
+          {
+            "href": "source/maps/02_resultado_univariante.html",
+            "path": "maps/02_resultado_univariante.html",
+            "title": "Mapa 02 - Resultado univariante",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "927.3 KB"
+          },
+          {
+            "href": "source/maps/03_resultado_bivariante.html",
+            "path": "maps/03_resultado_bivariante.html",
+            "title": "Mapa 03 - Resultado bivariante",
+            "kind": "Mapa HTML",
+            "note": "Mapa interactivo listo para abrir en navegador.",
+            "size": "2.3 MB"
+          }
+        ],
+        "data": [],
+        "docs": []
+      },
+      "quick_actions": [
+        {
+          "label": "Mapa principal",
+          "href": "source/maps/00_resumen_global.html"
+        }
+      ],
+      "counts": {
+        "overview": 0,
+        "maps": 3,
+        "data": 0,
+        "docs": 0,
+        "files": 4
+      },
+      "methodology": [
+        "Daily factors from the connected-vehicle inventory",
+        "NOx and CO2 factors defined as daily total emissions divided by daily total trips",
+        "Hourly traffic counts multiplied by the daily inventory factors to build proxy layers",
+        "Daily mean by station and variable",
+        "Inverse-distance interpolation to sector centroids",
+        "Mean value by sector across the full overlapping study period",
+        "Queen contiguity weights between sectors",
+        "Global Moran's I",
+        "Getis-Ord Gi*",
+        "Local Moran's I",
+        "Bivariate Global Moran's I",
+        "Bivariate Local Moran's I"
+      ],
+      "summary_payload": {
+        "article": {
+          "journal": "Experimental",
+          "year": 2026,
+          "volume": null,
+          "article_number": null,
+          "title": "LISA bivariante con proxies de emision derivados del inventario y el trafico observado"
+        },
+        "methodology": [
+          "Daily factors from the connected-vehicle inventory",
+          "NOx and CO2 factors defined as daily total emissions divided by daily total trips",
+          "Hourly traffic counts multiplied by the daily inventory factors to build proxy layers",
+          "Daily mean by station and variable",
+          "Inverse-distance interpolation to sector centroids",
+          "Mean value by sector across the full overlapping study period",
+          "Queen contiguity weights between sectors",
+          "Global Moran's I",
+          "Getis-Ord Gi*",
+          "Local Moran's I",
+          "Bivariate Global Moran's I",
+          "Bivariate Local Moran's I"
+        ],
+        "weight_note": "The inventory is not spatially observed by section. Spatial structure comes from the observed traffic parameter 'coches_total', while the inventory contributes daily emission intensity factors.",
+        "inputs": {
+          "sensor_csv": "C:\\Users\\Jose\\Desktop\\Jose\\EYSA\\Automatizacion\\Coche-Conectado-Estudio\\inputs\\combined_flags.csv",
+          "inventory_csv": "C:\\Users\\Jose\\Desktop\\Jose\\EYSA\\Automatizacion\\Coche-Conectado-Estudio\\inputs\\inventario_cartagena_maestro.csv",
+          "sectors": "C:\\Users\\Jose\\Desktop\\Jose\\EYSA\\Automatizacion\\Definitivo_Limpio\\data_static\\cartagena_census_sections.geojson",
+          "value_column": "analysis_value_default",
+          "sector_id": "cusec",
+          "traffic_param": "coches_total",
+          "sensor_variables": [
+            "CO",
+            "NO2",
+            "O3",
+            "SO2",
+            "PM10",
+            "PM25",
+            "PM1",
+            "VOC",
+            "CO2"
+          ],
+          "proxy_variables": [
+            "nox_proxy_trafico",
+            "co2_proxy_trafico"
+          ],
+          "nox_targets": [
+            "NO2",
+            "PM10",
+            "PM25",
+            "VOC"
+          ],
+          "co2_targets": [
+            "CO2"
+          ],
+          "bivariate_pairs": [
+            {
+              "variable_x": "nox_proxy_trafico",
+              "variable_y": "NO2"
+            },
+            {
+              "variable_x": "nox_proxy_trafico",
+              "variable_y": "PM10"
+            },
+            {
+              "variable_x": "nox_proxy_trafico",
+              "variable_y": "PM25"
+            },
+            {
+              "variable_x": "nox_proxy_trafico",
+              "variable_y": "VOC"
+            },
+            {
+              "variable_x": "co2_proxy_trafico",
+              "variable_y": "CO2"
+            }
+          ]
+        },
+        "study_period_local": {
+          "start_day": "2025-09-19",
+          "end_day": "2025-09-28"
+        },
+        "inventory_daily_factor_summary": {
+          "days": 10,
+          "mean_nox_factor_g_per_trip": 0.5400274954961312,
+          "mean_co2_factor_g_per_trip": 1033.2013418982901,
+          "min_nox_factor_g_per_trip": 0.4423422209567198,
+          "max_nox_factor_g_per_trip": 0.7684154870775348,
+          "min_co2_factor_g_per_trip": 885.9045808656036,
+          "max_co2_factor_g_per_trip": 1231.9789781312127
+        },
+        "sector_selection": {
+          "candidate_sector_count": 134,
+          "sector_count": 124,
+          "excluded_sector_count": 10,
+          "core_sensor_count": 38,
+          "core_radius_km": 5.0,
+          "study_buffer_m": 1250.0,
+          "max_nearest_sensor_km": 2.0
+        },
+        "sector_value_filter": {
+          "influence_radius_km": 1.0,
+          "min_local_stations": 2,
+          "valid_sector_count_by_variable": {
+            "CO": 68,
+            "NO2": 71,
+            "O3": 71,
+            "SO2": 68,
+            "PM10": 71,
+            "PM25": 71,
+            "PM1": 71,
+            "VOC": 63,
+            "CO2": 58,
+            "nox_proxy_trafico": 57,
+            "co2_proxy_trafico": 57
+          }
+        },
+        "traffic_selection": {
+          "traffic_sensor_count_before": 11,
+          "traffic_sensor_count_after": 11,
+          "traffic_rows_before": 4806,
+          "traffic_rows_after": 4806
+        },
+        "sector_count": 124,
+        "outputs": {
+          "inventory_daily_factors_csv": "inventory_daily_factors.csv",
+          "proxy_hourly_rows_csv": "proxy_hourly_rows.csv",
+          "augmented_sensor_csv": "combined_flags_with_proxies.csv",
+          "sector_results_geojson": "sector_results.geojson",
+          "univariate_global_csv": "univariate_global_results.csv",
+          "bivariate_global_csv": "bivariate_global_results.csv",
+          "summary_json": "run_summary.json"
+        }
+      },
+      "folder_name": "inventario_traffic_proxy_lisa"
+    },
+    {
+      "slug": "estudio-temporal-inventario-contaminacion",
+      "title": "Estudio temporal inventario-contaminación",
+      "short_title": "Estudio temporal",
+      "category": "Análisis temporal",
+      "badge": "Lectura temporal",
+      "description": "Reúne el resumen visual, la documentación y los datasets del estudio temporal diario entre inventario, actividad y concentraciones urbanas.",
+      "accent": "#E43A8D",
+      "period_label": "2025-09-19 a 2025-09-28",
+      "summary_kind": "temporal",
+      "metrics": [
+        {
+          "label": "Periodo",
+          "value": "2025-09-19 a 2025-09-28"
+        },
+        {
+          "label": "Días",
+          "value": "10"
+        },
+        {
+          "label": "Resultados clave",
+          "value": "3"
+        },
+        {
+          "label": "Referencias",
+          "value": "1"
+        }
+      ],
+      "highlight": "Señal más clara: Actividad del inventario -> NO2 sensores, con Pearson 0.600 y lectura 'señal visible'.",
+      "links": {
+        "overview": [
+          {
+            "href": "source/index.html",
+            "path": "index.html",
+            "title": "Resumen visual",
+            "kind": "Página HTML",
+            "note": "Resumen principal del estudio.",
+            "size": "34.8 KB"
+          }
+        ],
+        "maps": [],
+        "data": [
+          {
+            "href": "source/study_summary.json",
+            "path": "study_summary.json",
+            "title": "Resumen técnico",
+            "kind": "JSON",
+            "note": "Resumen técnico con metadatos y rutas del estudio.",
+            "size": "404 B"
+          },
+          {
+            "href": "source/key_results.csv",
+            "path": "key_results.csv",
+            "title": "Resultados clave",
+            "kind": "CSV",
+            "note": "Tabla exportable para análisis adicional.",
+            "size": "1.1 KB"
+          },
+          {
+            "href": "source/daily_city_panel.csv",
+            "path": "daily_city_panel.csv",
+            "title": "Panel diario de ciudad",
+            "kind": "CSV",
+            "note": "Tabla exportable para análisis adicional.",
+            "size": "6.6 KB"
+          },
+          {
+            "href": "source/model_results.csv",
+            "path": "model_results.csv",
+            "title": "Resultados de modelos",
+            "kind": "CSV",
+            "note": "Tabla exportable para análisis adicional.",
+            "size": "5.4 KB"
+          },
+          {
+            "href": "source/model_meta.csv",
+            "path": "model_meta.csv",
+            "title": "Metadatos de modelos",
+            "kind": "CSV",
+            "note": "Tabla exportable para análisis adicional.",
+            "size": "599 B"
+          },
+          {
+            "href": "source/exposure_profiles.csv",
+            "path": "exposure_profiles.csv",
+            "title": "Perfiles de exposición",
+            "kind": "CSV",
+            "note": "Tabla exportable para análisis adicional.",
+            "size": "1.2 KB"
+          },
+          {
+            "href": "source/charts_data.json",
+            "path": "charts_data.json",
+            "title": "Datos de gráficos",
+            "kind": "JSON",
+            "note": "Archivo incluido en el bloque documental.",
+            "size": "18.3 KB"
+          }
+        ],
+        "docs": [
+          {
+            "href": "source/README.md",
+            "path": "README.md",
+            "title": "README del estudio",
+            "kind": "Markdown",
+            "note": "Documento de apoyo en texto Markdown.",
+            "size": "918 B"
+          }
+        ]
+      },
+      "quick_actions": [
+        {
+          "label": "Resumen visual",
+          "href": "source/index.html"
+        },
+        {
+          "label": "Resumen técnico",
+          "href": "source/study_summary.json"
+        },
+        {
+          "label": "README",
+          "href": "source/README.md"
+        }
+      ],
+      "counts": {
+        "overview": 1,
+        "maps": 0,
+        "data": 7,
+        "docs": 1,
+        "files": 9
+      },
+      "methodology": [],
+      "summary_payload": {
+        "period_label": "2025-09-19 a 2025-09-28",
+        "n_days": 10,
+        "outputs": {
+          "daily_city_panel_csv": "daily_city_panel.csv",
+          "key_results_csv": "key_results.csv",
+          "model_results_csv": "model_results.csv",
+          "model_meta_csv": "model_meta.csv",
+          "exposure_profiles_csv": "exposure_profiles.csv",
+          "summary_json": "study_summary.json",
+          "summary_html": "index.html"
+        }
+      },
+      "folder_name": "estudio_temporal_inventario_contaminacion_cartagena"
+    }
+  ],
+  "resources": {
+    "inputs": [
+      {
+        "href": "materiales/csv/combined_flags.csv",
+        "path": "materiales/csv/combined_flags.csv",
+        "title": "combined_flags.csv",
+        "kind": "CSV de entrada",
+        "note": "Base observada de sensores y tráfico usada para interpolación espacial y contraste temporal.",
+        "size": "22.3 MB"
+      },
+      {
+        "href": "materiales/csv/inventario_cartagena_maestro.csv",
+        "path": "materiales/csv/inventario_cartagena_maestro.csv",
+        "title": "inventario_cartagena_maestro.csv",
+        "kind": "CSV de entrada",
+        "note": "Inventario maestro del vehículo conectado empleado para actividad, factores diarios y emisiones.",
+        "size": "372.1 KB"
+      }
+    ],
+    "code": [
+      {
+        "href": "materiales/codigo/build_inventory_trip_proxy_lisa.py",
+        "path": "materiales/codigo/build_inventory_trip_proxy_lisa.py",
+        "title": "build_inventory_trip_proxy_lisa.py",
+        "kind": "Script Python",
+        "note": "Construye el análisis espacial basado en trayectos counted, interiores y salidas.",
+        "size": "44.5 KB"
+      },
+      {
+        "href": "materiales/codigo/render_inventory_trip_proxy_lisa.py",
+        "path": "materiales/codigo/render_inventory_trip_proxy_lisa.py",
+        "title": "render_inventory_trip_proxy_lisa.py",
+        "kind": "Script Python",
+        "note": "Genera los mapas HTML del análisis espacial por trayectos.",
+        "size": "4.6 KB"
+      },
+      {
+        "href": "materiales/codigo/build_inventory_traffic_proxy_lisa.py",
+        "path": "materiales/codigo/build_inventory_traffic_proxy_lisa.py",
+        "title": "build_inventory_traffic_proxy_lisa.py",
+        "kind": "Script Python",
+        "note": "Construye el análisis espacial apoyado en tráfico observado y factores diarios del inventario.",
+        "size": "20.5 KB"
+      },
+      {
+        "href": "materiales/codigo/render_inventory_traffic_proxy_lisa.py",
+        "path": "materiales/codigo/render_inventory_traffic_proxy_lisa.py",
+        "title": "render_inventory_traffic_proxy_lisa.py",
+        "kind": "Script Python",
+        "note": "Genera los mapas HTML del análisis espacial basado en tráfico.",
+        "size": "3.0 KB"
+      },
+      {
+        "href": "materiales/codigo/build_inventory_temporal_response_study.py",
+        "path": "materiales/codigo/build_inventory_temporal_response_study.py",
+        "title": "build_inventory_temporal_response_study.py",
+        "kind": "Script Python",
+        "note": "Prepara el estudio temporal, sus tablas y el resumen visual diario.",
+        "size": "81.7 KB"
+      }
+    ]
+  }
+}

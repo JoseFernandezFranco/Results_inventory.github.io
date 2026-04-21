@@ -1,0 +1,13 @@
+{
+  "period_label": "2025-09-19 a 2025-09-28",
+  "n_days": 10,
+  "outputs": {
+    "daily_city_panel_csv": "daily_city_panel.csv",
+    "key_results_csv": "key_results.csv",
+    "model_results_csv": "model_results.csv",
+    "model_meta_csv": "model_meta.csv",
+    "exposure_profiles_csv": "exposure_profiles.csv",
+    "summary_json": "study_summary.json",
+    "summary_html": "index.html"
+  }
+}

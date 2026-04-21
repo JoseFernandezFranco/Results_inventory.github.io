@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portal de resultados EYSA</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-link" href="index.html">
+        <img src="assets/eysa-logo.png" alt="EYSA">
+        <div class="brand-copy">
+          <span>Portal de resultados</span>
+          <strong>Grupo EYSA</strong>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <section class="hero-wrap">
+    <div class="hero-card hero-card-main">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow eyebrow-on-dark">Visión integrada</span>
+          <h1>Resultados integrados del estudio de coche conectado</h1>
+          <p class="hero-copy">
+            Una única entrada visual para recorrer los análisis espaciales y temporales, comparar hallazgos
+            y acceder a mapas, datos y referencias con una navegación clara y directa.
+          </p>
+        </div>
+        <div class="hero-side">
+          <div class="callout callout-dark">
+            <span class="callout-tag">Resumen ejecutivo</span>
+            <div class="metric-row"><div class="metric-pill"><span>Estudios</span><strong>3</strong></div><div class="metric-pill"><span>Mapas</span><strong>6</strong></div><div class="metric-pill"><span>Archivos</span><strong>24</strong></div><div class="metric-pill"><span>Generado</span><strong>2026-04-21</strong></div></div>
+          </div>
+          <div class="callout callout-soft">
+            <span class="callout-tag">Lectura sugerida</span>
+            <p>Empieza por los bloques espaciales para ver la distribución territorial y termina en el estudio temporal para entender la relación diaria entre actividad, emisiones y calidad del aire.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="page-shell">
+    <section class="panel">
+      <div class="section-head">
+        <span class="eyebrow">Índice</span>
+        <h2>Bloques de análisis</h2>
+        <p>Selecciona el enfoque que quieras revisar para abrir su lectura visual, los mapas integrados y la documentación asociada.</p>
+      </div>
+      <div class="study-grid">
+        <article class="study-card" style="--study-accent:#3EA0AE"><div class="study-card-body"><span class="eyebrow">Análisis espacial</span><h2>Proxy por trayectos</h2><p>Centraliza los resultados del estudio que reparte emisiones diarias entre trayectos counted, interiores y salidas para comparar su patrón espacial con contaminación observada.</p><div class="metric-row compact"><div class="metric-pill"><span>Periodo</span><strong>2025-09-19 a 2025-09-28</strong></div><div class="metric-pill"><span>Sectores</span><strong>124</strong></div><div class="metric-pill"><span>ZBE funcional</span><strong>22</strong></div><div class="metric-pill"><span>Mapas</span><strong>3</strong></div></div><div class="callout"><span class="callout-tag">Lectura</span><p>Relación espacial más visible: Proxy NOx counted frente a NO2, con Moran bivariante -0.377 y p 0.001.</p></div><div class="actions"><a class="button button-primary" href="studies/inventario-trip-proxy-lisa/index.html">Abrir índice</a></div></div></article><article class="study-card" style="--study-accent:#84C987"><div class="study-card-body"><span class="eyebrow">Análisis espacial</span><h2>Proxy por tráfico</h2><p>Agrupa el estudio que combina factores diarios del inventario con tráfico observado para construir capas proxy de NOx y CO2 y contrastarlas con sensores.</p><div class="metric-row compact"><div class="metric-pill"><span>Periodo</span><strong>2025-09-19 a 2025-09-28</strong></div><div class="metric-pill"><span>Sectores</span><strong>124</strong></div><div class="metric-pill"><span>Sectores válidos</span><strong>57</strong></div><div class="metric-pill"><span>Mapas</span><strong>3</strong></div></div><div class="callout"><span class="callout-tag">Lectura</span><p>Relación espacial destacada: Proxy CO2 tráfico frente a CO2, con Moran bivariante -0.534 y p 0.010.</p></div><div class="actions"><a class="button button-primary" href="studies/inventario-traffic-proxy-lisa/index.html">Abrir índice</a></div></div></article><article class="study-card" style="--study-accent:#E43A8D"><div class="study-card-body"><span class="eyebrow">Análisis temporal</span><h2>Estudio temporal</h2><p>Reúne el resumen visual, la documentación y los datasets del estudio temporal diario entre inventario, actividad y concentraciones urbanas.</p><div class="metric-row compact"><div class="metric-pill"><span>Periodo</span><strong>2025-09-19 a 2025-09-28</strong></div><div class="metric-pill"><span>Días</span><strong>10</strong></div><div class="metric-pill"><span>Resultados clave</span><strong>3</strong></div><div class="metric-pill"><span>Referencias</span><strong>1</strong></div></div><div class="callout"><span class="callout-tag">Lectura</span><p>Señal más clara: Actividad del inventario -&gt; NO2 sensores, con Pearson 0.600 y lectura &#x27;señal visible&#x27;.</p></div><div class="actions"><a class="button button-primary" href="studies/estudio-temporal-inventario-contaminacion/source/index.html">Abrir resumen visual</a></div></div></article>
+      </div>
+    </section>
+
+    <section class="panel"><div class="section-head"><span class="eyebrow">README</span><h2>Cómo relanzar los estudios</h2><p>Descarga el ZIP, descomprímelo en una carpeta local y ejecuta <code>ejecutame.ps1</code>. El paquete ya incluye los 5 scripts y los 2 CSV necesarios.</p></div><div class="readme-note readme-note-centered"><p>Incluye 5 scripts, 2 CSV y 1 ejecutable PowerShell. Solo hay que descomprimirlo y lanzar ejecutame.ps1.</p><a class="button button-primary" href="materiales/reproducir_estudios_8_archivos.zip">Descargar ZIP de reproducción</a></div></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>Grupo EYSA | Análisis integrados para movilidad conectada, emisiones y calidad del aire.</p>
+    </div>
+  </footer>
+</body>
+</html>
